@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="「これ、アリかも。」で紹介したおすすめ商品をまとめています。">
+  <meta name="robots" content="index,follow">
+  <title>これ、アリかも。｜おすすめ商品一覧</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <span class="eyebrow">KORE ARI KAMO</span>
+      <h1>これ、アリかも。</h1>
+      <p>暮らしの中で見つけた、ちょっと気になる商品をまとめています。</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <aside class="notice">
+      <strong>広告について</strong>
+      <p>このページにはアフィリエイト広告を含みます。リンクから購入されると運営者に報酬が入る場合がありますが、購入価格は変わりません。</p>
+    </aside>
+
+    <section class="toolbar" aria-label="商品検索">
+      <input id="searchInput" type="search" placeholder="商品名・カテゴリから検索" aria-label="商品を検索">
+      <div id="categoryFilters" class="filters"></div>
+    </section>
+
+    <p id="resultCount" class="result-count" aria-live="polite"></p>
+    <section id="productGrid" class="product-grid" aria-label="商品一覧"></section>
+
+    <section id="emptyState" class="empty-state" hidden>
+      <div class="empty-icon">🐤</div>
+      <h2>商品を準備しています</h2>
+      <p>おすすめ商品を順次追加します。</p>
+      <a href="https://www.instagram.com/korearikamo/" target="_blank" rel="noopener noreferrer">Instagramを見る</a>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p>価格・在庫・キャンペーン内容は変更される場合があります。購入前に販売ページで最新情報をご確認ください。</p>
+      <p>© <span id="year"></span> これ、アリかも。</p>
+    </div>
+  </footer>
+
+  <script src="products.js"></script>
+  <script>
+    const products = Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
+    const grid = document.getElementById('productGrid');
+    const empty = document.getElementById('emptyState');
+    const input = document.getElementById('searchInput');
+    const filters = document.getElementById('categoryFilters');
+    const count = document.getElementById('resultCount');
+    let selected = 'すべて';
+
+    const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const categories = ['すべて', ...new Set(products.map(p => p.category).filter(Boolean))];
+
+    function renderFilters() {
+      filters.innerHTML = categories.map(category =>
+        `<button class=" טעfilter ${selected === category ? 'active' : ''}" data-category="${esc(category)}">${esc(category)}</button>`
+      ).join('').replaceAll(' טע','');
+    }
+
+    function render() {
+      const query = input.value.trim().toLowerCase();
+      const shown = products.filter(p =>
+        (selected === 'すべて' || p.category === selected) &&
+        (!query || [p.name,p.category,p.description].join(' ').toLowerCase().includes(query))
+      );
+      empty.hidden = products.length !== 0;
+      count.textContent = products.length ? `${shown.length}件の商品` : '';
+      grid.innerHTML = shown.map(p => `
+        <article class="card">
+          <a class="image" href="${esc(p.url)}" target="_blank" rel="sponsored noopener noreferrer">
+            <img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy">
+          </a>
+          <div class="card-body">
+            <span class="category">${esc(p.category || 'おすすめ')}</span>
+            <h2>${esc(p.name)}</h2>
+            <p>${esc(p.description)}</p>
+            ${p.price ? `<div class="price">${esc(p.price)}</div>` : ''}
+            <a class="button" href="${esc(p.url)}" target="_blank" rel="sponsored noopener noreferrer">商品を見る</a>
+          </div>
+        </article>
+      `).join('');
+      if (products.length && !shown.length) grid.innerHTML = '<p class="no-results">該当する商品がありません。</p>';
+    }
+
+    filters.addEventListener('click', event => {
+      const button = event.target.closest('[data-category]');
+      if (!button) return;
+      selected = button.dataset.category;
+      renderFilters();
+      render();
+    });
+    input.addEventListener('input', render);
+    document.getElementById('year').textContent = new Date().getFullYear();
+    renderFilters();
+    render();
+  </script>
+</body>
+</html>

@@ -61,8 +61,8 @@
 
     function renderFilters() {
       filters.innerHTML = categories.map(category =>
-        `<button class=" טעfilter ${selected === category ? 'active' : ''}" data-category="${esc(category)}">${esc(category)}</button>`
-      ).join('').replaceAll(' טע','');
+        `<button class="filter ${selected === category ? 'active' : ''}" data-category="${esc(category)}">${esc(category)}</button>`
+      ).join('');
     }
 
     function render() {

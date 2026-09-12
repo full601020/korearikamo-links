@@ -75,9 +75,6 @@
       count.textContent = products.length ? `${shown.length}件の商品` : '';
       grid.innerHTML = shown.map(p => `
         <article class="card">
-          <a class="image" href="${esc(p.url)}" target="_blank" rel="sponsored noopener noreferrer">
-            <img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy">
-          </a>
           <div class="card-body">
             <span class="category">${esc(p.category || 'おすすめ')}</span>
             <h2>${esc(p.name)}</h2>

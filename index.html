@@ -9,6 +9,13 @@
   <link rel="icon" href="assets/mascot-icon.png">
   <link rel="apple-touch-icon" href="assets/mascot-icon.png">
   <link rel="stylesheet" href="styles.css">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-78TPNMQE07"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-78TPNMQE07');
+  </script>
 </head>
 <body>
   <header class="hero">
@@ -155,7 +162,7 @@
             <h2>${esc(p.name)}</h2>
             <p>${esc(p.description)}</p>
             ${p.price ? `<div class="price">${esc(p.price)}</div>` : ''}
-            <a class="button" href="${esc(p.url)}" target="_blank" rel="sponsored noopener noreferrer">商品を見る</a>
+            <a class="button" href="${esc(p.url)}" target="_blank" rel="sponsored noopener noreferrer" data-track-shop="${esc(p.category || 'おすすめ')}" data-track-name="${esc(String(p.name || '').slice(0, 90))}">商品を見る</a>
           </div>
         </article>`;
         // 商品3件ごとに1枠、発行済みタグ数まで挿入する。
@@ -181,6 +188,17 @@
       render();
     });
     input.addEventListener('input', render);
+
+    // 商品リンクのクリックを、商品名・ショップ別にGA4へ送信する。
+    grid.addEventListener('click', event => {
+      const link = event.target.closest('.button');
+      if (!link || typeof gtag !== 'function') return;
+      gtag('event', 'product_click', {
+        shop: link.dataset.trackShop || 'おすすめ',
+        item_name: link.dataset.trackName || '',
+        link_url: link.href,
+      });
+    });
     document.getElementById('year').textContent = new Date().getFullYear();
     renderFilters();
     render();

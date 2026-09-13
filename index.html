@@ -48,7 +48,18 @@
 
   <script src="products.js"></script>
   <script>
-    const products = Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
+    const allProducts = Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
+    const now = new Date();
+    const today = [
+      now.getFullYear(),
+      String(now.getMonth() + 1).padStart(2, '0'),
+      String(now.getDate()).padStart(2, '0')
+    ].join('-');
+    // 掲載終了日はその日いっぱい有効。翌日から自動的に一覧へ表示しない。
+    const products = allProducts.filter(product => {
+      const expiresOn = String(product.expires_on || '').trim();
+      return !expiresOn || expiresOn >= today;
+    });
     const grid = document.getElementById('productGrid');
     const empty = document.getElementById('emptyState');
     const input = document.getElementById('searchInput');

@@ -97,6 +97,9 @@
       return Number.isNaN(n) ? Infinity : n;
     };
 
+    // 楽天の画像URLは既定で128x128と小さく、カード表示だとぼやけるため大きいサイズを要求し直す。
+    const highResImage = url => String(url || '').replace(/_ex=\d+x\d+/, '_ex=600x600');
+
     const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     const categories = ['すべて', ...new Set(products.map(p => p.category).filter(Boolean))];
 
@@ -187,7 +190,7 @@
         const c = categoryColor(p.category);
         const card = `
         <article class="card">
-          ${p.image_url ? `<div class="image"><img src="${esc(p.image_url)}" alt="" loading="lazy"></div>` : ''}
+          ${p.image_url ? `<div class="image"><img src="${esc(highResImage(p.image_url))}" alt="" loading="lazy"></div>` : ''}
           <div class="card-body">
             <div class="badges-row">
               <span class="category" style="color:${c.fg};background:${c.bg}">${esc(p.category || 'おすすめ')}</span>

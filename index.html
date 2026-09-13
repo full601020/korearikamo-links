@@ -6,14 +6,15 @@
   <meta name="description" content="「これ、アリかも。」で紹介したおすすめ商品をまとめています。">
   <meta name="robots" content="index,follow">
   <title>これ、アリかも。｜おすすめ商品一覧</title>
+  <link rel="icon" href="assets/mascot-icon.png">
+  <link rel="apple-touch-icon" href="assets/mascot-icon.png">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="hero">
     <div class="wrap">
-      <span class="eyebrow">KORE ARI KAMO</span>
-      <h1>これ、アリかも。</h1>
-      <p>暮らしの中で見つけた、ちょっと気になる商品をまとめています。</p>
+      <img class="hero-banner" src="assets/hero-banner.jpg" alt="これ、アリかも。ネットで見つけたちょっといいもの、シェアします。" width="2172" height="724">
+      <h1 class="sr-only">これ、アリかも。</h1>
     </div>
   </header>
 
@@ -32,7 +33,7 @@
     <section id="productGrid" class="product-grid" aria-label="商品一覧"></section>
 
     <section id="emptyState" class="empty-state" hidden>
-      <div class="empty-icon">🐤</div>
+      <img class="empty-icon" src="assets/mascot-icon.png" alt="" width="72" height="72">
       <h2>商品を準備しています</h2>
       <p>おすすめ商品を順次追加します。</p>
       <a href="https://www.instagram.com/korearikamo/" target="_blank" rel="noopener noreferrer">Instagramを見る</a>
@@ -69,6 +70,24 @@
 
     const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     const categories = ['すべて', ...new Set(products.map(p => p.category).filter(Boolean))];
+
+    // カテゴリ名から色を自動割り当てる（同じカテゴリ名は常に同じ色になる）。
+    const CATEGORY_PALETTE = [
+      { fg: '#c0392b', bg: '#fdece9' },
+      { fg: '#1f8a56', bg: '#e7f7ee' },
+      { fg: '#2464b4', bg: '#e8f1fb' },
+      { fg: '#8e3fa6', bg: '#f5ecf9' },
+      { fg: '#b9860a', bg: '#fbf3dd' },
+      { fg: '#c23a78', bg: '#fceaf1' },
+      { fg: '#1f9a90', bg: '#e5f6f5' },
+      { fg: '#c96a2e', bg: '#fbeee0' },
+    ];
+    function categoryColor(name) {
+      const str = String(name || '');
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) hash = (hash * 31 + str.charCodeAt(i)) >>> 0;
+      return CATEGORY_PALETTE[hash % CATEGORY_PALETTE.length];
+    }
 
     // 忍者AdMax: 発行済みの広告枠タグのみをここに追加する。
     // 同一タグを複数回貼るのは推奨されないため、未発行の枠は追加しない。
@@ -108,9 +127,12 @@
     }
 
     function renderFilters() {
-      filters.innerHTML = categories.map(category =>
-        `<button class="filter ${selected === category ? 'active' : ''}" data-category="${esc(category)}">${esc(category)}</button>`
-      ).join('');
+      filters.innerHTML = categories.map(category => {
+        const isAll = category === 'すべて';
+        const c = isAll ? null : categoryColor(category);
+        const style = c ? `style="--chip-fg:${c.fg};--chip-bg:${c.bg}"` : '';
+        return `<button class="filter ${isAll ? '' : 'filter-colored'} ${selected === category ? 'active' : ''}" data-category="${esc(category)}" ${style}>${esc(category)}</button>`;
+      }).join('');
     }
 
     function render() {
@@ -125,10 +147,11 @@
       const slotCount = Math.min(plannedAdSlotCount(shown.length), AD_TAGS.length);
       let adsPlaced = 0;
       const blocks = shown.map((p, index) => {
+        const c = categoryColor(p.category);
         const card = `
         <article class="card">
           <div class="card-body">
-            <span class="category">${esc(p.category || 'おすすめ')}</span>
+            <span class="category" style="color:${c.fg};background:${c.bg}">${esc(p.category || 'おすすめ')}</span>
             <h2>${esc(p.name)}</h2>
             <p>${esc(p.description)}</p>
             ${p.price ? `<div class="price">${esc(p.price)}</div>` : ''}

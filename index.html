@@ -33,6 +33,11 @@
 
     <section class="toolbar" aria-label="商品検索">
       <input id="searchInput" type="search" placeholder="商品名・カテゴリから検索" aria-label="商品を検索">
+      <select id="sortSelect" aria-label="並び替え">
+        <option value="default">掲載順</option>
+        <option value="new">新着順</option>
+        <option value="price_asc">価格が安い順</option>
+      </select>
       <div id="categoryFilters" class="filters"></div>
     </section>
 
@@ -72,8 +77,25 @@
     const empty = document.getElementById('emptyState');
     const input = document.getElementById('searchInput');
     const filters = document.getElementById('categoryFilters');
+    const sortSelect = document.getElementById('sortSelect');
     const count = document.getElementById('resultCount');
     let selected = 'すべて';
+
+    // 追加から3日以内の商品にNEWバッジを付ける。
+    const NEW_WITHIN_DAYS = 3;
+    const newCutoff = new Date(now);
+    newCutoff.setDate(newCutoff.getDate() - NEW_WITHIN_DAYS);
+    const newCutoffStr = [
+      newCutoff.getFullYear(),
+      String(newCutoff.getMonth() + 1).padStart(2, '0'),
+      String(newCutoff.getDate()).padStart(2, '0')
+    ].join('-');
+    const isNewProduct = p => String(p.added_on || '').trim() >= newCutoffStr;
+
+    const priceNumber = p => {
+      const n = parseInt(String(p.price || '').replace(/[^0-9]/g, ''), 10);
+      return Number.isNaN(n) ? Infinity : n;
+    };
 
     const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     const categories = ['すべて', ...new Set(products.map(p => p.category).filter(Boolean))];
@@ -151,14 +173,26 @@
       empty.hidden = products.length !== 0;
       count.textContent = products.length ? `${shown.length}件の商品` : '';
 
-      const slotCount = Math.min(plannedAdSlotCount(shown.length), AD_TAGS.length);
+      const sortMode = sortSelect.value;
+      const ordered = shown.slice();
+      if (sortMode === 'new') {
+        ordered.sort((a, b) => String(b.added_on || '').localeCompare(String(a.added_on || '')));
+      } else if (sortMode === 'price_asc') {
+        ordered.sort((a, b) => priceNumber(a) - priceNumber(b));
+      }
+
+      const slotCount = Math.min(plannedAdSlotCount(ordered.length), AD_TAGS.length);
       let adsPlaced = 0;
-      const blocks = shown.map((p, index) => {
+      const blocks = ordered.map((p, index) => {
         const c = categoryColor(p.category);
         const card = `
         <article class="card">
+          ${p.image_url ? `<div class="image"><img src="${esc(p.image_url)}" alt="" loading="lazy"></div>` : ''}
           <div class="card-body">
-            <span class="category" style="color:${c.fg};background:${c.bg}">${esc(p.category || 'おすすめ')}</span>
+            <div class="badges-row">
+              <span class="category" style="color:${c.fg};background:${c.bg}">${esc(p.category || 'おすすめ')}</span>
+              ${isNewProduct(p) ? '<span class="new-badge">NEW</span>' : ''}
+            </div>
             <h2>${esc(p.name)}</h2>
             <p>${esc(p.description)}</p>
             ${p.price ? `<div class="price">${esc(p.price)}</div>` : ''}
@@ -188,6 +222,7 @@
       render();
     });
     input.addEventListener('input', render);
+    sortSelect.addEventListener('change', render);
 
     // 商品リンクのクリックを、商品名・ショップ別にGA4へ送信する。
     grid.addEventListener('click', event => {

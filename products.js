@@ -66,7 +66,7 @@ window.PRODUCTS = [
   },
   {
     "name": "ダブルポイント祭り　7000円以上でポイント２倍　今日まで",
-    "category": "Amazonアソシエイト",
+    "category": "Amazon",
     "description": "気になった商品をチェック。",
     "price": "",
     "url": "https://link.amazon/B017dkmDl",

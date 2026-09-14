@@ -127,5 +127,15 @@ window.PRODUCTS = [
     "expires_on": "",
     "image_url": "https://thumbnail.image.rakuten.co.jp/@0_mall/e-kurashi/cabinet/main-img/018/main-s5t10-04.jpg?_ex=128x128",
     "added_on": "2026-09-14"
+  },
+  {
+    "name": "FRAY I.D(フレイ アイディー) バレルフォルムデニムパンツFWFP262066レディース",
+    "category": "Amazon",
+    "description": "気になった商品をチェック。",
+    "price": "",
+    "url": "https://link.amazon/B0ejno4U8",
+    "expires_on": "",
+    "image_url": "",
+    "added_on": "2026-09-14"
   }
 ];

@@ -101,11 +101,31 @@ window.PRODUCTS = [
   {
     "name": "【助産師さん監修×ベビモこどもに掲載】＼楽天1位／ おむつストッカー オムツストッカー 収納バッグ ベビー用品 おしりふき おむつ ケース 新生児 赤ちゃん ふた付き 大容量 ポケット付き 出産祝い ギフト プレジュール(Plaisiureux)",
     "category": "楽天市場",
-    "description": "レビュー★4.4（1,019件）・送料無料",
+    "description": "レビュー★4.4（1,020件）・送料無料",
     "price": "2,480円",
     "url": "https://hb.afl.rakuten.co.jp/hgc/g00tb0po.82zek93d.g00tb0po.82zel1ce/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fplaisiureux%2Fpl_36%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fplaisiureux%2Fi%2F10000063%2F&rafcid=wsc_i_is_ccea80f3-e059-47ab-a7c8-f1cc79eda553",
     "expires_on": "",
     "image_url": "https://thumbnail.image.rakuten.co.jp/@0_mall/plaisiureux/cabinet/09353293/10451160/imgrc0161294108.jpg?_ex=128x128",
     "added_on": "2026-09-13"
+  },
+  {
+    "name": "ヨガマット 厚手 10mm 15mm 収納ケース付き 収納バンド付き マットピラティス ホットヨガマット ストレッチマット トレーニングマット エクササイズマット ダイエット 筋トレ 男女兼用 軽量 宅トレ 初心者 上級者 thya FSZ",
+    "category": "楽天市場",
+    "description": "レビュー★4.32（12,629件）",
+    "price": "1,980円",
+    "url": "https://hb.afl.rakuten.co.jp/hgc/g00rehxo.82zek983.g00rehxo.82zel712/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fdabada%2Fyoga-mat-10%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fdabada%2Fi%2F10000522%2F&rafcid=wsc_i_is_ccea80f3-e059-47ab-a7c8-f1cc79eda553",
+    "expires_on": "",
+    "image_url": "https://thumbnail.image.rakuten.co.jp/@0_mall/dabada/cabinet/04904787/10mm/yoga-mat10_tmb1.jpg?_ex=128x128",
+    "added_on": "2026-09-14"
+  },
+  {
+    "name": "収納ワゴン キャスター付き ラック 奥行75.5 高さ64.5 幅26/38/44cm 押入れ収納 押入れ 収納 クローゼット クローゼット収納 パントリー 収納ボックス 階段下 バッグ ランドセル ペットボトル 前後 引き出し 山善 YAMAZEN 【送料無料】",
+    "category": "楽天市場",
+    "description": "レビュー★4.42（6,045件）・送料無料",
+    "price": "5,499円",
+    "url": "https://hb.afl.rakuten.co.jp/hgc/g00pui9o.82zekcc2.g00pui9o.82zel3b2/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fe-kurashi%2F1417397%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fe-kurashi%2Fi%2F10001202%2F&rafcid=wsc_i_is_ccea80f3-e059-47ab-a7c8-f1cc79eda553",
+    "expires_on": "",
+    "image_url": "https://thumbnail.image.rakuten.co.jp/@0_mall/e-kurashi/cabinet/main-img/018/main-s5t10-04.jpg?_ex=128x128",
+    "added_on": "2026-09-14"
   }
 ];
